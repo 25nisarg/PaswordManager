@@ -45,26 +45,29 @@ const Manager = () => {
                     </lord-icon>
                 </button>
             </div>
-            <div className='passwords flex flex-col lg:w-2/3 w-full sm:flex-col my-2 mx-auto px-8 sm:space-x-4 sm:space-y-0 space-y-4 sm:px-0 items-end bg-white/20 p-4 rounded-xl overflow-hidden gap-4'>
-                <h1 className='text-white text-3xl text-bold'>Your Passwords</h1>
-                <table className="table-auto  text-white text-center ">
+            <div className='passwords flex flex-col lg:w-2/3 w-full sm:flex-col my-2 mx-auto px-8 sm:space-x-4 sm:space-y-0 space-y-4 sm:px-0 items-center bg-white/15 rounded-xl overflow-hidden gap-4 py-4'>
+                <h1 className='text-white text-3xl font-bold'>Your Passwords</h1>
+                {passwordArray.length === 0 && <div className='text-white'>No Passwords to Show</div>}
+                {passwordArray.length != 0 && 
+                <table className="table-auto  text-white text-center">
                     <thead>
                         <tr>
-                            <th className='border-b p-2'>Website</th>
-                            <th className='border-b p-2'>Username</th>
-                            <th className='border-b p-2'>Password</th>
+                            <th className='border-b-2 p-2'>Website</th>
+                            <th className='border-b-2 p-2'>Username</th>
+                            <th className='border-b-2 p-2'>Password</th>
                         </tr>
                     </thead>
                     <tbody className=''>
-                        <tr>
-                            <td className='w-50  border-b'>The Sliding Mr. Bones </td>
-                            <td className='w-50  border-b'>Malcolm Lockyer</td>
-                            <td className='w-50  border-b'>1961</td>
-                        </tr>
+                        {passwordArray.map((item,index)=>{
+                        return (<tr key={index}>
+                            <td className='w-50  border-b border-white/40'>{item.website}</td>
+                            <td className='w-50  border-b border-white/40'>{item.uname}</td>
+                            <td className='w-50  border-b border-white/40'>{item.Password}</td>
+                        </tr>)
+                        })}
                        
                     </tbody>
-                </table>
-
+                </table>}
             </div>
         </>
     )
