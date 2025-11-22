@@ -1,16 +1,47 @@
-# React + Vite
+# Password Manager Using MERN
+A secure and modern Password Manager application built using the MERN stack. This application allows users to store, manage, and retrieve their credentials for various websites with a sleek user interface powered by Tailwind CSS and animated Lordicons.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## ✨ Features
+Add Credentials: Securely save website names, usernames, and passwords.
 
-Currently, two official plugins are available:
+View & Manage: View saved passwords with a toggle to show/hide hidden characters.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Copy to Clipboard: One-click copying for usernames and passwords.
 
-## React Compiler
+Search Functionality: Quickly filter through your saved accounts.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Responsive UI: Fully responsive design built with Tailwind CSS.
+Interactive Icons: Animated icons powered by Lordicons.
 
-## Expanding the ESLint configuration
+Persistent Storage: Data stored securely in MongoDB via Mongoose.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🛠️ Tech Stack
+### Frontend
+
+React.js: UI Library
+
+Tailwind CSS: Styling framework
+
+Lordicons: Animated icons 
+
+### Backend
+
+Node.js: Runtime environment
+
+Express.js: Web framework
+
+Mongoose: ODM for MongoDB
+
+## Database
+MongoDB: NoSQL Database
+
+## 🚀 Getting Started
+Follow these instructions to set up the project locally.
+
+Prerequisites
+
+Node.js (v14 or higher)
+
+MongoDB (Local instance or Atlas URI)
+
+Git
