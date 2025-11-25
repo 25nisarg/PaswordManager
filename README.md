@@ -13,7 +13,7 @@ Search Functionality: Quickly filter through your saved accounts.
 Responsive UI: Fully responsive design built with Tailwind CSS.
 Interactive Icons: Animated icons powered by Lordicons.
 
-Persistent Storage: Data stored securely in MongoDB via Mongoose.
+Persistent Storage: Data stored securely in MongoDB.
 
 ## 🛠️ Tech Stack
 ### Frontend
@@ -30,7 +30,7 @@ Node.js: Runtime environment
 
 Express.js: Web framework
 
-Mongoose: ODM for MongoDB
+MongoDB
 
 ## Database
 MongoDB: NoSQL Database

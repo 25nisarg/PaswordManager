@@ -6,13 +6,20 @@ const Manager = () => {
     const [form, setform] = useState({ website: "", uname: "", Password: "" })
     const [passwordArray, setpasswordArray] = useState([])
     const [showPassword, setShowPassword] = useState(false)
-    useEffect(() => {
-        let passwords = localStorage.getItem("passwords");
-        if (passwords) {
-            setpasswordArray(JSON.parse(passwords))
-        }
 
+    const getPasswords = async () => {
+        let req = await fetch("http://localhost:3000/")
+        let passwords = await req.json();
+        console.log(passwords)
+        if (passwords) {
+            setpasswordArray(passwords)
+        }
+    }
+
+    useEffect(() => {
+        getPasswords()
     }, [])
+
     const copyText = (text) => {
         toast.success('Copied to clipboard!', {
             position: "top-right",
@@ -27,10 +34,14 @@ const Manager = () => {
         navigator.clipboard.writeText(text)
     }
 
-    const savePassword = () => {
+    const savePassword = async () => {
         if (form.website && form.Password && form.uname) {
-            setpasswordArray([...passwordArray, { ...form, id: uuidv4() }])
-            localStorage.setItem("passwords", JSON.stringify([...passwordArray, { ...form, id: uuidv4() }]))
+            // setpasswordArray([...passwordArray, { ...form, id: uuidv4() }])
+            // localStorage.setItem("passwords", JSON.stringify([...passwordArray, { ...form, id: uuidv4() }]))
+            await fetch("http://localhost:3000/", { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id:form.id }) })
+            setpasswordArray([...passwordArray,{...form,id:uuidv4()}])
+            let res = await fetch("http://localhost:3000/", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...form, id: uuidv4() }) })
+
             console.log([...passwordArray, form])
             setform({ website: "", uname: "", Password: "" })
             toast.success('Password Saved!', {
@@ -60,15 +71,17 @@ const Manager = () => {
     }
     const editPassword = (id) => {
         console.log(id)
-        setform(passwordArray.filter(i => i.id === id)[0])
+        setform({...passwordArray.filter(i => i.id === id)[0],id:id})
         setpasswordArray(passwordArray.filter(item => item.id !== id))
 
     }
-    const deletePassword = (id) => {
+    const deletePassword = async (id) => {
         let toDel = confirm("Do you want to Delete password")
         if (toDel) {
             setpasswordArray(passwordArray.filter(item => item.id !== id))
-            localStorage.setItem("passwords", JSON.stringify(passwordArray.filter(item => item.id !== id)))
+            // localStorage.setItem("passwords", JSON.stringify(passwordArray.filter(item => item.id !== id)))
+            let res = await fetch("http://localhost:3000/", { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id }) })
+
             toast.success('Password Deleted!', {
                 position: "top-right",
                 autoClose: 3000,
@@ -100,8 +113,8 @@ const Manager = () => {
                 pauseOnHover
                 theme="light"
             />
-            <div className="absolute inset-0 -z-10 h-full w-full items-center px-5 py-24 [background:radial-gradient(125%_125%_at_50%_10%,#000_40%,#63e_100%)]"></div>
-            <div className="flex lg:w-2/3 w-full sm:flex-row flex-col my-2 mx-auto px-8 sm:space-x-4 sm:space-y-0 space-y-4 sm:px-0 items-end">
+            {/* <div className="absolute inset-0 -z-10 h-full w-full items-center px-5 py-24"></div> */}
+            <div className="flex lg:w-2/3 w-full sm:flex-row flex-col  mx-auto px-8 sm:space-x-4 sm:space-y-0 space-y-4 sm:px-0 items-end">
                 <div className="relative grow w-full">
                     <label htmlFor="website" className="leading-7 text-sm text-white">Website</label>
                     <input value={form.website} onChange={handleChange} type="text" id="website" name="website" className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-transparent focus:text-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-800 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" />
@@ -122,11 +135,11 @@ const Manager = () => {
                     </lord-icon>
                 </button>
             </div>
-            <div className="flex lg:w-2/3 w-full flex-row my-2 mx-auto px-8 sm:space-x-4 sm:space-y-0 space-y-0 sm:px-0 justify-start align-middle">
+            <div className="flex lg:w-2/3 w-full flex-row mx-auto px-8 sm:space-x-4 sm:space-y-0 space-y-0 sm:px-0 justify-start align-middle">
                 <input type="checkbox" name="showPassword" id="showPassword" checked={showPassword} onChange={() => setShowPassword(!showPassword)} />
                 <span className='text-white'> Show password</span>
             </div>
-            <div className='passwords flex flex-col lg:w-2/3 w-full sm:flex-col my-2 mx-auto px-8 sm:w-90vw sm:space-y-0 space-y-4 sm:px-0 items-center bg-white/15 rounded-xl overflow-hidden gap-4 py-4'>
+            <div className='passwords flex flex-col lg:w-2/3 w-full sm:flex-col  mx-auto px-8 sm:w-90vw sm:space-y-0 space-y-4 sm:px-0 items-center bg-white/15 rounded-xl overflow-hidden gap-4 py-4'>
                 <h1 className='text-white text-3xl font-bold'>Your Passwords</h1>
                 {passwordArray.length === 0 && <div className='text-white'>No Passwords to Show</div>}
                 {passwordArray.length != 0 &&
@@ -146,14 +159,14 @@ const Manager = () => {
                                     <td className='border-b border-white/40 p-2'>{item.uname}</td>
 
                                     <td className='border-b border-white/40 p-2 ' onClick={() => copyText(item.Password)}>
-                                    <div className='flex justify-center align-middle cursor-pointer'>
-                                    {showPassword ? item.Password : "****"} <lord-icon
-                                        src="https://cdn.lordicon.com/iykgtsbt.json"
-                                        trigger="hover"
-                                        colors="primary:#ffffff,secondary:#ffffff"
-                                        style={{ "width": "22px" }}
-                                        >
-                                    </lord-icon>
+                                        <div className='flex justify-center align-middle cursor-pointer'>
+                                            {showPassword ? item.Password : "****"} <lord-icon
+                                                src="https://cdn.lordicon.com/iykgtsbt.json"
+                                                trigger="hover"
+                                                colors="primary:#ffffff,secondary:#ffffff"
+                                                style={{ "width": "22px" }}
+                                            >
+                                            </lord-icon>
                                         </div>
                                     </td>
                                     <td className='border-b border-white/40 p-2'>
